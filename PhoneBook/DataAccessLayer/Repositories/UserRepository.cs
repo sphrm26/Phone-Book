@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Models;
+using System;
 using System.Data;
 
 namespace DataAccessLayer.Repositories
@@ -46,7 +47,29 @@ namespace DataAccessLayer.Repositories
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", email);
 
-                return db.Query<User>("GetUserByEmail", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();                
+                return db.Query<User>("GetUserByEmail", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+            }
+        }
+        bool UpdateUser(User user)
+        {
+            try
+            {
+                using (IDbConnection db = new SqlConnection(_connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@UserID", user.Id);
+                    parameters.Add("@NewName", user.name);
+                    parameters.Add("@NewPassword", user.password);
+                    parameters.Add("@NewContact", user.contacts);
+                    parameters.Add("@NewEmail", user.email);
+
+                    db.Execute("UpdateUser", parameters, commandType: CommandType.StoredProcedure);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
