@@ -1,8 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using Models;
 using System.Data;
-using System;
-using Dapper;
 
 namespace DataAccessLayer.Repositories
 {
@@ -20,7 +19,7 @@ namespace DataAccessLayer.Repositories
         {
             this._connectionString = connectionString;
         }
-        bool AddUser(User user)
+        public bool AddUser(User user)
         {
             try
             {
@@ -40,6 +39,15 @@ namespace DataAccessLayer.Repositories
                 return false;
             }
         }
+        public User? FindUserByEmail(string email)
+        {
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@email", email);
 
+                return db.Query<User>("GetUserByEmail", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();                
+            }
+        }
     }
 }
