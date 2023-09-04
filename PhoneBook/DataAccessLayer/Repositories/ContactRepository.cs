@@ -17,4 +17,33 @@ namespace DataAccessLayer.Repositories
         bool UpdateContact(Contact contact);
         bool DeleteContact(int contactId);
     }
+    public class ContactRepository : IContactRepository
+    {
+        private string _connectionString;
+        public ContactRepository(string connectionString)
+        {
+            this._connectionString = connectionString;
+        }
+        public bool AddContact(Contact contact)
+        {
+            try
+            {
+                using (IDbConnection db = new SqlConnection(_connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@first_name", contact.first_name);
+                    parameters.Add("@last_name", contact.last_name);
+                    parameters.Add("@phone_number", contact.phone_number);
+                    parameters.Add("@user_Id", contact.user_Id);
+                    db.Execute("AddContact", parameters, commandType: CommandType.StoredProcedure);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+    }
 }
