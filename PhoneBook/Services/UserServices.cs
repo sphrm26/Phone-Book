@@ -141,9 +141,31 @@ namespace Services
         }
         public Response LogIn(string email, string password)
         {
-            //پیدا کردن با ایمیل
-            //چک کردن رمز
-            return new Response() { };
+            var user = db.UserRepository.FindUserByEmail(email);
+
+            if (user == null)
+            {
+                return new Response()
+                {
+                    isSuccess = false,
+                    message= "your email is incorrect!"
+                };
+            }
+
+            if(user.password != password)
+            {
+                return new Response()
+                {
+                    isSuccess = false,
+                    message = "your password is incorrect!"
+                };
+            }
+
+            return new Response() 
+            {
+                isSuccess = true,
+                message = "successfuly login"
+            };
         }
     }
 }
