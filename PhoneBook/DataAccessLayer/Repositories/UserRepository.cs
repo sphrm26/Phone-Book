@@ -50,7 +50,7 @@ namespace DataAccessLayer.Repositories
                 return db.Query<User>("GetUserByEmail", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
             }
         }
-        bool UpdateUser(User user)
+        public bool UpdateUser(User user)
         {
             try
             {
@@ -64,6 +64,24 @@ namespace DataAccessLayer.Repositories
                     parameters.Add("@NewEmail", user.email);
 
                     db.Execute("UpdateUser", parameters, commandType: CommandType.StoredProcedure);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool DeleteUser(int user_Id)
+        {
+            try
+            {
+                using (IDbConnection db = new SqlConnection(_connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Id", user_Id);
+
+                    db.Execute("DeleteUser", parameters, commandType: CommandType.StoredProcedure);
                 }
                 return true;
             }
