@@ -79,5 +79,23 @@ namespace DataAccessLayer.Repositories
                 return false;
             }
         }
+        public bool DeleteContact(int contactId)
+        {
+            try
+            {
+                using (IDbConnection db = new SqlConnection(_connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Id", contactId);
+
+                    db.Execute("DeleteContact", parameters, commandType: CommandType.StoredProcedure);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
