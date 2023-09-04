@@ -45,5 +45,17 @@ namespace DataAccessLayer.Repositories
                 return false;
             }
         }
+        public List<Contact> GetAllContacts(int user_Id)
+        {
+            List<Contact> list;
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@user_Id", user_Id);
+                list = db.Query<Contact>("GetAllContacts", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+            return list;
+        }
     }
 }
