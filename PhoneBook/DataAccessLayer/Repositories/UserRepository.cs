@@ -1,9 +1,4 @@
 ﻿using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
@@ -13,5 +8,8 @@ namespace DataAccessLayer.Repositories
         User FindUserByEmail(string email);
         bool UpdateUser(User user);
         bool DeleteUser(int user_Id);
+    }
+    public class UserRepository : IUserRepository
+    {
     }
 }
