@@ -57,5 +57,27 @@ namespace DataAccessLayer.Repositories
 
             return list;
         }
+        public bool UpdateContact(Contact contact)
+        {
+            try
+            {
+                using (IDbConnection db = new SqlConnection(_connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Id", contact.Id);
+                    parameters.Add("@first_name", contact.first_name);
+                    parameters.Add("@last_name", contact.last_name);
+                    parameters.Add("@phone_number", contact.phone_number);
+                    parameters.Add("@user_Id", contact.user_Id);
+
+                    db.Execute("UpdateContact", parameters, commandType: CommandType.StoredProcedure);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
