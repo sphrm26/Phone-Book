@@ -31,7 +31,23 @@ namespace Services
             return new Response()
             {
                 isSuccess = true,
-                message = "new contact successfuly added"                
+                message = "new contact successfuly added"
+            };
+        }
+        public Response UpdateContact(int Id, int User_Id, string first_name, string last_name, string phone_number)
+        {
+            db.ContactRepository.UpdateContact(new Contact()
+            {
+                Id = Id,
+                first_name = first_name,
+                last_name = last_name,
+                phone_number = phone_number,
+                user_Id = User_Id
+            });
+            return new Response() 
+            {
+                isSuccess = true,
+                message = "contact successfuly update"
             };
         }
     }
