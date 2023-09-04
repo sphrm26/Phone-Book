@@ -123,14 +123,21 @@ namespace Services
                     message = "this email is already exist!"
                 };
             }
-            //autentication
 
-            db.UserRepository.AddUser(new User()
+            Authentication authentication = new Authentication(name, email, password);
+            var response = authentication.Authentication_SignUp();
+
+            if(db.UserRepository.AddUser(new User()
             {
                 email = email,
                 password = password,
                 name = name
-            });
+            })== false)
+            {
+                response.isSuccess = false;
+                response.message = "an error occurred in data base!";
+            }
+            return response;
         }
         public Response LogIn(string email, string password)
         {
