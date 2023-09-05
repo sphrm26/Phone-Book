@@ -50,5 +50,14 @@ namespace Services
                 message = "contact successfuly update"
             };
         }
+        public Response DeleteContact(int Id)
+        {
+            db.ContactRepository.DeleteContact(Id);
+            return new Response() 
+            {
+                isSuccess = true,
+                message = "contact successfuly deleted"
+            };
+        }
     }
 }
