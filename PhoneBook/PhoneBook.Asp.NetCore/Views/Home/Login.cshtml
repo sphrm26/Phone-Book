@@ -24,6 +24,11 @@
                         <div class="clear"> </div>
                     </div>
                     <input type="submit" value="LOGIN">
+                    @if (ViewBag.message != null)
+                    {
+                            <p style="color:red;font-weight:500">@ViewBag.message</p>
+                            <hr />
+                    }
                 </form>
                 <p>
                     Don't have an Account? <a asp-controller="Home" asp-action="Enter" asp-route-Id="SingUp">Sign Up Now!</a>

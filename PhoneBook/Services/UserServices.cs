@@ -115,18 +115,25 @@ namespace Services
         private UnitOfWork db = new UnitOfWork();
         public Response SignUp(string name, string email, string password)
         {
+            var response = new Response();
+
+            //check for dos not have same email
             if (db.UserRepository.FindUserByEmail(email) != null)
             {
-                return new Response()
-                {
-                    isSuccess = false,
-                    message = "this email is already exist!"
-                };
+                response.isSuccess = false;
+                response.message = "this email is already exist!";
+                return response;
             }
 
+            //Authentication for valid sign up
             Authentication authentication = new Authentication(name, email, password);
-            var response = authentication.Authentication_SignUp();
+            response = authentication.Authentication_SignUp();
+            if (!response.isSuccess)
+            {
+                return response;
+            }
 
+            //add User to Database
             if(db.UserRepository.AddUser(new User()
             {
                 email = email,

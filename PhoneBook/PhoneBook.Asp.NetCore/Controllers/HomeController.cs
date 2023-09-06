@@ -1,27 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
-using Models;
 
 namespace PhoneBook.Asp.NetCore.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Enter(string Id = "SingUp")
+        [Route("/{Id?}/{message?}")]
+        public IActionResult Enter(string message, string Id = "SignUp")
         {
-            if(Id == "Login")
+            ViewBag.message = TempData["message"] as string;
+            if (TempData["id"] as string != null)
+            {
+                Id = TempData["id"] as string;
+            }
+            if (Id == "Login")
             {
                 return View("Login");
             }
             return View("SignUp");
         }
-        public Object SignUp(string email, string name, string password)
+        [HttpPost]
+        [Route("/{email?}/{name?}/{password?}")]
+        public IActionResult SignUp(string email, string name, string password)
         {
             UserServices userService = new UserServices();
-            if (userService.SignUp(name, email, password).isSuccess)
+            var response = userService.SignUp(name, email, password);
+            TempData["message"] = response.message;
+            if (response.isSuccess)
             {
-                
+                return View("UserPanel");
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Enter");
+        }
+        [HttpPost]
+        [Route("/{email?}/{password?}")]
+        public IActionResult Login(string email, string password)
+        {
+            UserServices userService = new UserServices();
+            var response = userService.LogIn(email, password);
+            if (response.isSuccess)
+            {
+                return View("UserPanel");
+            }
+            TempData["message"] = response.message;
+            TempData["Id"] = "Login";
+            return RedirectToAction("Enter");
         }
     }
 }
