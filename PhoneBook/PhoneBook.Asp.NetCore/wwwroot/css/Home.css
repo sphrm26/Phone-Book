@@ -761,3 +761,26 @@ input.checkbox {
         padding: 1em 0 0;
     }
 }
+
+button {
+    background: #eeeb12;
+    margin: 1.5em 0;
+    padding: 0.8em;
+    font-size: .85em;
+    outline: none;
+    border: 1px solid #b8b652;
+    cursor: pointer;
+    padding: 0.9em;
+    -webkit-appearance: none;
+    width: 49.5%;
+    margin: 0em 0;
+    letter-spacing: 4px;
+}
+    button:hover {
+        -webkit-transition: .5s all;
+        -moz-transition: .5s all;
+        -o-transition: .5s all;
+        -ms-transition: .5s all;
+        transition: .5s all;
+        background: #c2be6f;
+    }

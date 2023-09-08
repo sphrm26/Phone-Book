@@ -1,0 +1,41 @@
+﻿@using PhoneBook
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Creative Colorlib SignUp Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <link rel="stylesheet" href="~/css/Home.css" />
+    <script src="~/js/bootstrap-rtl.js"></script>
+    <script src="~/js/jquery-1.10.2.min.js"></script>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+</head>
+<body>
+    <form asp-controller="UserPanel" asp-action="TestTest" method="get">
+        <input type="submit" value="d">
+    </form>
+    <button  @*onclick="addToCart(6)"*@>sepehr1</button>
+    <script>
+        function addToCart(id) {
+            alert(id);
+            $.ajax({
+                url: '@Url.Action("Test","UserPanel")',
+                data: { id: id },
+                success: function (data) {
+                    alert("succes");
+                    alert(data);
+                    //call is successfully completed and we got result in data
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //some errror, some show err msg to user and log the error
+                    alert(xhr.responseText);
+                    alert("error");
+
+                }
+            });
+        }
+    </script>
+</body>
+</html>

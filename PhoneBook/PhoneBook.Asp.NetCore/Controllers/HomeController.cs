@@ -1,50 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Models;
 using Services;
 
 namespace PhoneBook.Asp.NetCore.Controllers
 {
     public class HomeController : Controller
     {
-        [Route("/{Id?}/{message?}")]
-        public IActionResult Enter(string message, string Id = "SignUp")
+        public IActionResult Entrance()
         {
-            ViewBag.message = TempData["message"] as string;
-            if (TempData["id"] as string != null)
-            {
-                Id = TempData["id"] as string;
-            }
-            if (Id == "Login")
-            {
-                return View("Login");
-            }
-            return View("SignUp");
+            return View();
         }
         [HttpPost]
-        [Route("/{email?}/{name?}/{password?}")]
-        public IActionResult SignUp(string email, string name, string password)
+        [AllowAnonymous]
+        public Response SignUp(string email, string name, string password, string confirmPassword)
         {
-            UserServices userService = new UserServices();
-            var response = userService.SignUp(name, email, password);
-            TempData["message"] = response.message;
-            if (response.isSuccess)
+            if(password != confirmPassword)
             {
-                return View("UserPanel");
+                return new Response()
+                {
+                    isSuccess = false,
+                    message = "Please make sure your passwords match!"
+                };
             }
-            return RedirectToAction("Enter");
+            UserServices userService = new UserServices();
+            return userService.SignUp(name, email, password);
         }
         [HttpPost]
-        [Route("/{email?}/{password?}")]
-        public IActionResult Login(string email, string password)
+        [AllowAnonymous]
+        public Response Login(string email, string password)
         {
             UserServices userService = new UserServices();
-            var response = userService.LogIn(email, password);
-            if (response.isSuccess)
-            {
-                return View("UserPanel");
-            }
-            TempData["message"] = response.message;
-            TempData["Id"] = "Login";
-            return RedirectToAction("Enter");
+            return userService.LogIn(email, password);
         }
     }
 }

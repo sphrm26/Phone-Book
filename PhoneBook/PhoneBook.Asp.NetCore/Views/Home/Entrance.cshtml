@@ -1,0 +1,171 @@
+﻿@using PhoneBook
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Creative Colorlib SignUp Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <link rel="stylesheet" href="~/css/Home.css" />
+    <script src="~/js/bootstrap-rtl.js"></script>
+    <script src="~/js/jquery-1.10.2.min.js"></script>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+</head>
+<body>
+    <div class="main-w3layouts wrapper">
+        <h1>Phone Book</h1>
+
+
+        <div class="main-agileinfo" text-align: center;">
+            <div class="justify-content-center agileits-top">
+                <button onclick="ShowSignUp()">Sign Up</button>
+                <button onclick="ShowLogin()">Login</button>
+            </div>
+        </div>
+
+
+
+
+
+        <div id="Login" style="display:none" class="main-agileinfo">
+            <div class="agileits-top">
+                <form onsubmit="Login()">
+                    <input class="text email" type="email" Id="emailLogin" placeholder="Email" required="">
+                    <input class="text" type="password" Id="passwordLogin" placeholder="Password" required="">
+                    <div class="wthree-text">
+                        <div class="clear"> </div>
+                    </div>
+                    <div id="errorBoxLogin" style="display:none;margin-top:5%">
+                        <p id="errorMessageLogin" style="color:red;font-weight:500"></p>
+                    </div>
+                    <input type="submit" value="LOGIN">
+                </form>
+            </div>
+        </div>
+
+        <div id="SignUp" style="display:none" class="main-agileinfo">
+            <div class="agileits-top">
+                <form onsubmit="SignUp()">
+                    <input class="text" type="text" Id="nameSignUp" placeholder="name" required="">
+                    <input class="text email" type="email" Id="emailSignUp" placeholder="Email" required="">
+                    <input class="text" type="password" Id="passwordSignUp" placeholder="Password" required="">
+                    <input class="text w3lpass" type="password" Id="ConfirmPasswordSignUp" placeholder="Confirm Password" required="">
+                    <div class="wthree-text">
+                        <label class="anim">
+                            <input type="checkbox" class="checkbox" required="">
+                            <span>I Agree To The Terms & Conditions</span>
+                        </label>
+                        <div class="clear"> </div>
+                    </div>
+                    <div id="errorBoxSignUp" style="display:none;margin-top:5%">
+                        <p id="errorMessageSignUp" style="color:red;font-weight:500"></p>
+                    </div>
+                    <input type="submit" value="SIGNUP">
+
+                </form>
+            </div>
+        </div>
+
+
+
+        <ul class="colorlib-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function ShowSignUp() {
+            document.getElementById("Login").style.display = "none";
+            document.getElementById("SignUp").style.display = "block";
+        }
+        function ShowLogin() {
+            document.getElementById("SignUp").style.display = "none";
+            document.getElementById("Login").style.display = "block";
+        }
+
+        function Login() {
+            event.preventDefault();
+
+            var email = document.getElementById("emailLogin").value;
+            var password = document.getElementById("passwordLogin").value;
+
+            var promise = new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '/Home/Login',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        password: password
+                    }
+                }).done(function (data) {
+                    resolve(data);
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+                    reject(xhr.responseText);
+                });
+            });
+
+            promise.then(function (data) {
+                if (data.isSuccess) {
+                    window.location.href = "/UserPanel/Panel/";
+                }
+                else {
+                    document.getElementById("errorBoxLogin").style.display = "block";
+                    document.getElementById("errorMessageLogin").innerHTML = data.message;
+                }
+            }).catch(function (error) {
+                alert(error);
+            });
+        }
+
+        function SignUp() {
+            event.preventDefault();
+
+            var email = document.getElementById("emailSignUp").value;
+            var password = document.getElementById("passwordSignUp").value;
+            var confirmPassword = document.getElementById("ConfirmPasswordSignUp").value;
+            var name = document.getElementById("nameSignUp").value;
+
+
+
+            var promise = new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '/Home/SignUp',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        name: name,
+                        password: password,
+                        confirmPassword: confirmPassword
+                    }
+                }).done(function (data) {
+                    resolve(data);
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+                    reject(xhr.responseText);
+                });
+            });
+
+            promise.then(function (data) {
+                if (data.isSuccess) {
+                    window.location.href = "/UserPanel/Panel/";
+                }
+                else {
+                    document.getElementById("errorBoxSignUp").style.display = "block";
+                    document.getElementById("errorMessageSignUp").innerHTML = data.message;
+                }
+            }).catch(function (error) {
+                alert(error);
+            });
+        }
+    </script>
+</body>
+</html>
