@@ -54,5 +54,23 @@ namespace PhoneBook.Asp.NetCore.Controllers
             response = contactService.UpdateContact(Id, User_Id, first_name, last_name, phone_number);
             return response;
         }
+        public Response DeleteContact(string email, string password, int Id)
+        {
+            UserServices userService = new UserServices();
+            var response = userService.LogIn(email, password);
+
+            if (!response.isSuccess)
+            {
+                return new Response()
+                {
+                    isSuccess = false,
+                    message = "security error!"
+                };
+            }
+
+            ContactServices contactService = new ContactServices();
+            response = contactService.DeleteContact(Id);
+            return response;
+        }
     }
 }
