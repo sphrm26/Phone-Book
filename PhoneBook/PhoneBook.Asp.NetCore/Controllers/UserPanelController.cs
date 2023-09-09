@@ -17,8 +17,26 @@ namespace PhoneBook.Asp.NetCore.Controllers
             UserServices userService = new UserServices();
             var response = userService.LogIn(email, password);
 
+            if (!response.isSuccess)
+            {
+                return new Response()
+                {
+                    isSuccess = false,
+                    message = "security error!"
+                };
+            }
+
             string objSerialized = Newtonsoft.Json.JsonConvert.SerializeObject(response.objects[0]);
-            int Id = ((dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(objSerialized)).Id;
+            int User_Id = ((dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(objSerialized)).Id;
+
+            ContactServices contactService = new ContactServices();
+            response = contactService.AddContact(User_Id, first_name, last_name, phone_number);
+            return response;
+        }
+        public Response EditContact(string email, string password, string first_name, string last_name, string phone_number, int Id)
+        {
+            UserServices userService = new UserServices();
+            var response = userService.LogIn(email, password);
 
             if (!response.isSuccess)
             {
@@ -28,8 +46,12 @@ namespace PhoneBook.Asp.NetCore.Controllers
                     message = "security error!"
                 };
             }
+
+            string objSerialized = Newtonsoft.Json.JsonConvert.SerializeObject(response.objects[0]);
+            int User_Id = ((dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(objSerialized)).Id;
+
             ContactServices contactService = new ContactServices();
-            response = contactService.AddContact(Id, first_name, last_name, phone_number);
+            response = contactService.UpdateContact(Id, User_Id, first_name, last_name, phone_number);
             return response;
         }
     }
