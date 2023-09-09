@@ -28,7 +28,6 @@ namespace PhoneBook.Asp.NetCore.Controllers
             {
                 TempData["email"] = email;
                 TempData["password"] = password;
-                TempData["Id"] = ((dynamic)response.objects[0]).id;
                 RedirectToAction("Panel", "UserPanel");
             }
             return response;
@@ -43,10 +42,6 @@ namespace PhoneBook.Asp.NetCore.Controllers
             {
                 TempData["email"] = email;
                 TempData["password"] = password;
-                string objSerialized = Newtonsoft.Json.JsonConvert.SerializeObject(response.objects[0]);
-                int Id = ((dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(objSerialized)).Id;
-
-                TempData["Id"] = Convert.ToString(Id);
                 RedirectToAction("Panel", "UserPanel");
             }
             return response;

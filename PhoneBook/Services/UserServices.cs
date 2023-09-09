@@ -139,15 +139,6 @@ namespace Services
                 response.isSuccess = false;
                 response.message = "an error occurred in data base!";
             }
-            response.objects = new List<object>()
-                {
-                    new
-                    {
-                        email = user.email,
-                        password = user.password,
-                        Id = user.Id
-                    }
-                };
             return response;
         }
         public Response LogIn(string email, string password)
@@ -188,10 +179,8 @@ namespace Services
                 message = "successfuly login",
                 objects = new List<object>()
                 {
-                    new
+                    new 
                     {
-                        email = user.email,
-                        password = user.password,
                         Id = user.Id
                     }
                 }
