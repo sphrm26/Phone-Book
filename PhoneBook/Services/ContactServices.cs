@@ -15,7 +15,7 @@ namespace Services
         {
             return new Response()
             {
-                objects = db.ContactRepository.GetAllContacts(User_Id).ToList<Object>(),
+                objects = db.ContactRepository.GetAllContacts(User_Id).ToList<object>(),
                 isSuccess = true
             };
         }

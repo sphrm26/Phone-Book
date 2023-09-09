@@ -72,5 +72,26 @@ namespace PhoneBook.Asp.NetCore.Controllers
             response = contactService.DeleteContact(Id);
             return response;
         }
+        public Response GetAllContact(string email, string password)
+        {
+            UserServices userService = new UserServices();
+            var response = userService.LogIn(email, password);
+
+            if (!response.isSuccess)
+            {
+                return new Response()
+                {
+                    isSuccess = false,
+                    message = "security error!"
+                };
+            }
+
+            string objSerialized = Newtonsoft.Json.JsonConvert.SerializeObject(response.objects[0]);
+            int User_Id = ((dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(objSerialized)).Id;
+
+            ContactServices contactService = new ContactServices();
+            response = contactService.GetAllContact(User_Id);
+            return response;
+        }
     }
 }
