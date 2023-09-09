@@ -13,29 +13,77 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
 </head>
 <body>
-    <form asp-controller="UserPanel" asp-action="TestTest" method="get">
-        <input type="submit" value="d">
-    </form>
-    <button  @*onclick="addToCart(6)"*@>sepehr1</button>
-    <script>
-        function addToCart(id) {
-            alert(id);
-            $.ajax({
-                url: '@Url.Action("Test","UserPanel")',
-                data: { id: id },
-                success: function (data) {
-                    alert("succes");
-                    alert(data);
-                    //call is successfully completed and we got result in data
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    //some errror, some show err msg to user and log the error
-                    alert(xhr.responseText);
-                    alert("error");
 
-                }
-            });
-        }
+
+    <div class="main-w3layouts wrapper">
+        <h1>Phone Book</h1>
+        <div class="main-agileinfo text-align: center;">
+            <div style="padding:0" class="justify-content-center agileits-top">
+                <button class="addButton" onclick="ShowSignUp()">add contact</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 60%; margin-top: 0;" id="Login" class="main-agileinfo">
+        <div class="agileits-top">
+            <div class="container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>first name</th>
+                            <th>last name</th>
+                            <th>phone number</th>
+                            <th>action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactTable">
+                        <tr>
+                            <td>Cell 1</td>
+                            <td>Cell 2</td>
+                            <td>Cell 3</td>
+                            <td>
+                                <button class="editButton">
+                                    edit
+                                </button>
+                                <button class="deleteButton">
+                                    delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div style="display: none;position: absolute; top: 10%;left: 30%;width: 40%;height: 50%;background-color: rgb(48, 46, 2);" class="main-agileinfo">
+        <div class="agileits-top">
+            <form onsubmit="Login()">
+                <button style="position: absolute;right: 0%;top: 0% ;width: 5%;height: 5%;padding: 0%;margin: 0%;text-align: center;" type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input class="text" type="text" Id="first name" placeholder="first name" required=""><br>
+                <input class="text" type="text" Id="last name" placeholder="last name" required=""><br>
+                <input class="text" type="text" Id="phone number" placeholder="phone number" required="">
+                <input type="submit" value="submit">
+            </form>
+        </div>
+    </div>
+
+    <ul class="colorlib-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <script>
     </script>
 </body>
 </html>

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
-
 namespace PhoneBook.Asp.NetCore.Controllers
 {
     public class HomeController : Controller
@@ -15,7 +14,7 @@ namespace PhoneBook.Asp.NetCore.Controllers
         [AllowAnonymous]
         public Response SignUp(string email, string name, string password, string confirmPassword)
         {
-            if(password != confirmPassword)
+            if (password != confirmPassword)
             {
                 return new Response()
                 {
@@ -24,14 +23,33 @@ namespace PhoneBook.Asp.NetCore.Controllers
                 };
             }
             UserServices userService = new UserServices();
-            return userService.SignUp(name, email, password);
+            var response = userService.SignUp(name, email, password);
+            if (response.isSuccess)
+            {
+                TempData["email"] = email;
+                TempData["password"] = password;
+                TempData["Id"] = ((dynamic)response.objects[0]).id;
+                RedirectToAction("Panel", "UserPanel");
+            }
+            return response;
         }
         [HttpPost]
         [AllowAnonymous]
         public Response Login(string email, string password)
         {
             UserServices userService = new UserServices();
-            return userService.LogIn(email, password);
+            var response = userService.LogIn(email, password);
+            if (response.isSuccess)
+            {
+                TempData["email"] = email;
+                TempData["password"] = password;
+                string objSerialized = Newtonsoft.Json.JsonConvert.SerializeObject(response.objects[0]);
+                int Id = ((dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(objSerialized)).Id;
+
+                TempData["Id"] = Convert.ToString(Id);
+                RedirectToAction("Panel", "UserPanel");
+            }
+            return response;
         }
     }
 }

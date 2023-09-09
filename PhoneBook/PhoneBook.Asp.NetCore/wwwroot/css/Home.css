@@ -776,6 +776,7 @@ button {
     margin: 0em 0;
     letter-spacing: 4px;
 }
+
     button:hover {
         -webkit-transition: .5s all;
         -moz-transition: .5s all;
@@ -783,4 +784,92 @@ button {
         -ms-transition: .5s all;
         transition: .5s all;
         background: #c2be6f;
+    }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+th,
+td {
+    padding: 15px;
+    background-color: rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+th {
+    text-align: left;
+}
+
+thead {
+    th
+
+{
+    background-color: #55608f;
+}
+
+}
+
+tbody {
+    tr
+
+{
+    &:hover
+
+{
+    background-color: rgba(255,255,255,0.3);
+}
+
+}
+
+td {
+    position: relative;
+    &:hover
+
+{
+    &:before
+
+{
+    content: "";
+    background-color: rgba(255,255,255,0.2);
+    z-index: -1;
+}
+
+}
+}
+}
+
+.addButton {
+    width: 100%;
+    margin: 0;
+    background-color: rgb(36, 200, 36);
+}
+
+    .addButton:hover {
+        width: 100%;
+        margin: 0;
+        background-color: rgb(138, 144, 23);
+    }
+
+.editButton {
+    width: max-content;
+    background-color: rgba(234, 223, 13, 0.873);
+}
+
+    .editButton:hover {
+        width: max-content;
+        background-color: rgb(230, 227, 161);
+    }
+
+.deleteButton {
+    width: max-content;
+    background-color: rgb(225, 7, 7);
+}
+
+    .deleteButton:hover {
+        width: max-content;
+        background-color: rgb(230, 227, 161);
     }

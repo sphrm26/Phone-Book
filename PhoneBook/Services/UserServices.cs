@@ -1,12 +1,6 @@
 ﻿using DataAccessLayer;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -118,7 +112,8 @@ namespace Services
             var response = new Response();
 
             //check for dos not have same email
-            if (db.UserRepository.FindUserByEmail(email) != null)
+            User user = db.UserRepository.FindUserByEmail(email);
+            if (user != null)
             {
                 response.isSuccess = false;
                 response.message = "this email is already exist!";
@@ -134,16 +129,25 @@ namespace Services
             }
 
             //add User to Database
-            if(db.UserRepository.AddUser(new User()
+            if (db.UserRepository.AddUser(new User()
             {
                 email = email,
                 password = password,
                 name = name
-            })== false)
+            }) == false)
             {
                 response.isSuccess = false;
                 response.message = "an error occurred in data base!";
             }
+            response.objects = new List<object>()
+                {
+                    new
+                    {
+                        email = user.email,
+                        password = user.password,
+                        Id = user.Id
+                    }
+                };
             return response;
         }
         public Response LogIn(string email, string password)
@@ -155,11 +159,11 @@ namespace Services
                 return new Response()
                 {
                     isSuccess = false,
-                    message= "your email is incorrect!"
+                    message = "your email is incorrect!"
                 };
             }
 
-            if(user.password != password)
+            if (user.password != password)
             {
                 return new Response()
                 {
@@ -168,10 +172,29 @@ namespace Services
                 };
             }
 
-            return new Response() 
+            var obj = new List<object>()
+                {
+                    new
+                    {
+                        email = user.email,
+                        password = user.password,
+                        Id = user.Id
+                    }
+                };
+            Console.WriteLine(((dynamic)obj[0]).Id);
+            return new Response()
             {
                 isSuccess = true,
-                message = "successfuly login"
+                message = "successfuly login",
+                objects = new List<object>()
+                {
+                    new
+                    {
+                        email = user.email,
+                        password = user.password,
+                        Id = user.Id
+                    }
+                }
             };
         }
     }
