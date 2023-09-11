@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer;
 using Models;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace Services
@@ -179,12 +180,36 @@ namespace Services
                 message = "successfuly login",
                 objects = new List<object>()
                 {
-                    new 
+                    new
                     {
                         Id = user.Id
                     }
                 }
             };
+        }
+        public void SendOTP(string email)
+        {
+
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("mysmtp2sphrm26@gmail.com");
+                email = Convert.ToString(email);
+                mail.To.Add(email);
+                mail.Subject = "football fantasy one time password";
+
+                Random rnd = new Random();
+                string code = Convert.ToString(rnd.Next(100000, 1000000));
+                
+                mail.Body = $"hello\nthis is your one time password\n{code}\nnow you can signUp in Phone Book\nhave a nice time";
+                mail.IsBodyHtml = true;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.Credentials = new System.Net.NetworkCredential("mysmtp2sphrm26@gmail.com", "ccrdhlvctcahcjjk");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+            }
         }
     }
 }
