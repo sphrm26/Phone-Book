@@ -195,12 +195,12 @@ namespace Services
                 mail.From = new MailAddress("mysmtp2sphrm26@gmail.com");
                 email = Convert.ToString(email);
                 mail.To.Add(email);
-                mail.Subject = "football fantasy one time password";
+                mail.Subject = "Phone Book one time password";
 
                 Random rnd = new Random();
                 string code = Convert.ToString(rnd.Next(100000, 1000000));
                 
-                mail.Body = $"hello\nthis is your one time password\n{code}\nnow you can signUp in Phone Book\nhave a nice time";
+                mail.Body = "<body>\r\n    <h1 style=\"text-align: center;\">Phone Book One Time Password</h1><br>\r\n    <U>\r\n        <h3 style=\"text-align: center;\">983939</h3><br>\r\n    </U>\r\n    <p style=\"text-align: center;\">this is your one time password\r\n        now you can signUp in Phone Book\r\n    </p>\r\n    <p style=\"text-align: center;\">\r\n        have a nice time\r\n    </p>\r\n</body>";
                 mail.IsBodyHtml = true;
 
                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))

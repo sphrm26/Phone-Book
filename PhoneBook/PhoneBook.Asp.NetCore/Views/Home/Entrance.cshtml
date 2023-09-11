@@ -156,7 +156,7 @@
 
             promise.then(function (data) {
                 if (data.isSuccess) {
-                    window.location.href = '@Url.Action("SomeAction", "SomeController", new { email = "example@example.com", password = "mypassword" })';
+                    window.location.href = "/OTP/EnterOTP/";
                 }
                 else {
                     document.getElementById("errorBoxSignUp").style.display = "block";
