@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
 
@@ -8,8 +9,8 @@ namespace PhoneBook.Asp.NetCore.Controllers
     {
         public IActionResult Panel()
         {
-            string email = TempData["email"] as string;
-            string password = TempData["password"] as string;
+            ViewBag.email = TempData["email"] as string;
+            ViewBag.password = TempData["password"] as string;
             return View();
         }
         public Response AddContact(string email, string password, string first_name, string last_name, string phone_number)
@@ -72,6 +73,8 @@ namespace PhoneBook.Asp.NetCore.Controllers
             response = contactService.DeleteContact(Id);
             return response;
         }
+        [HttpPost]
+        [AllowAnonymous]
         public Response GetAllContact(string email, string password)
         {
             UserServices userService = new UserServices();

@@ -13,13 +13,14 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
 </head>
 <body>
-
+    <p style="display:none" id="email">@ViewBag.email</p>
+    <p style="display:none" id="password">@ViewBag.password</p>
 
     <div class="main-w3layouts wrapper">
         <h1>Phone Book</h1>
         <div class="main-agileinfo text-align: center;">
             <div style="padding:0" class="justify-content-center agileits-top">
-                <button class="addButton" onclick="ShowSignUp()">add contact</button>
+                <button class="addButton" onclick="ShowAddBox()">add contact</button>
             </div>
         </div>
     </div>
@@ -38,17 +39,6 @@
                     </thead>
                     <tbody id="contactTable">
                         <tr>
-                            <td>Cell 1</td>
-                            <td>Cell 2</td>
-                            <td>Cell 3</td>
-                            <td>
-                                <button class="editButton">
-                                    edit
-                                </button>
-                                <button class="deleteButton">
-                                    delete
-                                </button>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -57,17 +47,17 @@
     </div>
 
 
-    <div style="display: none;position: absolute; top: 10%;left: 30%;width: 40%;height: 50%;background-color: rgb(48, 46, 2);" class="main-agileinfo">
+    <div id="Box" style="display: none;position: absolute; top: 10%;left: 30%;width: 40%;height: 50%;background-color: rgb(48, 46, 2);" class="main-agileinfo">
         <div class="agileits-top">
-            <form onsubmit="Login()">
-                <button style="position: absolute;right: 0%;top: 0% ;width: 5%;height: 5%;padding: 0%;margin: 0%;text-align: center;" type="button" class="close" aria-label="Close">
+            <div id="formBox">
+                <button onclick="closeBox()" style="position: absolute;right: 0%;top: 0% ;width: 5%;height: 5%;padding: 0%;margin: 0%;text-align: center;" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <input class="text" type="text" Id="first name" placeholder="first name" required=""><br>
                 <input class="text" type="text" Id="last name" placeholder="last name" required=""><br>
-                <input class="text" type="text" Id="phone number" placeholder="phone number" required="">
-                <input type="submit" value="submit">
-            </form>
+                <input class="text" type="text" Id="phone number" placeholder="phone number" required=""><br>
+                <button class="btn_submitBox" id="submitBox" onclick="AddContact()">Submit</button>
+            </div>
         </div>
     </div>
 
@@ -83,7 +73,240 @@
         <li></li>
         <li></li>
     </ul>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+        var Id;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            SetTable();
+        });
+
+        function DeleteContact(id) {
+            var email = document.getElementById("email").innerHTML;
+            var password = document.getElementById("password").innerHTML;
+
+            var promise = new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '/UserPanel/DeleteContact',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        password: password,
+                        Id: id
+                    }
+                }).done(function (data) {
+                    resolve(data);
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+                    reject(xhr.responseText);
+                });
+            });
+
+            promise.then(function (data) {
+                if (data.isSuccess) {
+                    SetTable();
+                }
+                else {
+
+                    alert("error")
+                }
+            }).catch(function (error) {
+                alert(error);
+            });
+        }
+
+        function ShowAddBox() {
+            document.getElementById("submitBox").onclick = AddContact;
+            document.getElementById("first name").value = null;
+            document.getElementById("last name").value = null;
+            document.getElementById("phone number").value = null;
+            document.getElementById("Box").style.display = "block";
+        }
+
+        function ShowEditBox(id, first_name, last_name, phone_number) {
+
+            Id = id;
+            document.getElementById("submitBox").onclick = function () {
+                EditContact();
+            };
+            document.getElementById("first name").value = first_name;
+            document.getElementById("last name").value = last_name;
+            document.getElementById("phone number").value = phone_number;
+            document.getElementById("Box").style.display = "block";
+        }
+
+        function closeBox() {
+            document.getElementById("Box").style.display = "none";
+            document.getElementById("first name").innerHTML = null
+            document.getElementById("last name").innerHTML = null;
+            document.getElementById("phone number").innerHTML = null;
+        }
+
+        function EditContact() {
+            var email = document.getElementById("email").innerHTML;
+            var password = document.getElementById("password").innerHTML;
+
+            var promise = new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '/UserPanel/EditContact',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        password: password,
+                        first_name: document.getElementById("first name").value,
+                        last_name: document.getElementById("last name").value,
+                        phone_number: document.getElementById("phone number").value,
+                        Id: Id
+                    }
+                }).done(function (data) {
+                    resolve(data);
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+                    reject(xhr.responseText);
+                });
+            });
+
+            promise.then(function (data) {
+                if (data.isSuccess) {
+                    SetTable();
+                }
+                else {
+
+                    alert("error")
+                }
+            }).catch(function (error) {
+                alert(error);
+            });
+        }
+
+        function AddContact() {
+            var email = document.getElementById("email").innerHTML;
+            var password = document.getElementById("password").innerHTML;
+
+            var promise = new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '/UserPanel/AddContact',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        password: password,
+                        first_name: document.getElementById("first name").value,
+                        last_name: document.getElementById("last name").value,
+                        phone_number: document.getElementById("phone number").value
+                    }
+                }).done(function (data) {
+                    resolve(data);
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+                    reject(xhr.responseText);
+                });
+            });
+
+            promise.then(function (data) {
+                if (data.isSuccess) {
+                    SetTable();
+                }
+                else {
+
+                    alert("error")
+                }
+            }).catch(function (error) {
+                alert(error);
+            });
+        }
+
+        function SetTable() {
+
+            var email = document.getElementById("email").innerHTML;
+            var password = document.getElementById("password").innerHTML;
+
+            document.getElementById("email").innerHTML = email;
+            document.getElementById("password").innerHTML = password;
+
+            var promise = new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '/UserPanel/GetAllContact',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        password: password
+                    }
+                }).done(function (data) {
+                    resolve(data);
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+                    reject(xhr.responseText);
+                });
+            });
+
+            promise.then(function (data) {
+                if (data.isSuccess) {
+
+                    var table = "";
+                    $.each(data.objects, function (index, value) {
+                        table += "<tr>";
+
+
+
+                        table += "<td>";
+                        table += value.first_name
+                        table += "</td>";
+
+
+                        table += "<td>";
+                        table += value.last_name
+                        table += "</td>";
+
+
+                        table += "<td>";
+                        table += value.phone_number
+                        table += "</td>";
+
+
+                        table += "<td>";
+                        table += "<button";
+
+                        table += " onclick=\"ShowEditBox( ";
+                        table += "'";
+                        table += value.id;
+                        table += "'";
+                        table += ",";
+                        table += "'";
+                        table += value.first_name
+                        table += "'";
+                        table += ",";
+                        table += "'";
+                        table += value.last_name;
+                        table += "'";
+                        table += ",";
+                        table += "'";
+                        table += value.phone_number;
+                        table += "'";
+                        table += ")\"";
+
+                        table += " class='editButton'>edit</button><button ";
+
+                        table += " onclick=\"DeleteContact( ";
+                        table += "'";
+                        table += value.id;
+                        table += "'";
+                        table += ")\"";
+
+                        table += " class='deleteButton'>delete</button>"
+                        table += "</td>";
+
+
+
+                        table += "</tr>";
+                    });
+                    $("#contactTable").html(table);
+                }
+                else {
+                    alert("error please exit and login again");
+                }
+            }).catch(function (error) {
+                alert(error);
+            });
+            document.getElementById("Box").style.display = "none";
+        }
     </script>
 </body>
 </html>
