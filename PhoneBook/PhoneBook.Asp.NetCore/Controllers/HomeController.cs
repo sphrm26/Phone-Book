@@ -48,9 +48,12 @@ namespace PhoneBook.Asp.NetCore.Controllers
         }
         public IActionResult EnterOTP()
         {
-
-            ViewBag.email = TempData["email"] as string;
-            ViewBag.password = TempData["password"] as string;
+            string email = TempData["email"] as string;
+            var password = TempData["password"] as string;
+            UserServices userService = new UserServices();
+            userService.SendOTP(email);
+            ViewBag.email = email;
+            ViewBag.password = password;
             return View();
         }
         public void OTPCorrectionCheck(string email, string password)
