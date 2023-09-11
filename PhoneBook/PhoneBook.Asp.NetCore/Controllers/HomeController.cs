@@ -28,7 +28,7 @@ namespace PhoneBook.Asp.NetCore.Controllers
             {
                 TempData["email"] = email;
                 TempData["password"] = password;
-                RedirectToAction("Panel", "UserPanel");
+                RedirectToAction("EnterOTP", "Home");
             }
             return response;
         }
@@ -45,6 +45,19 @@ namespace PhoneBook.Asp.NetCore.Controllers
                 RedirectToAction("Panel", "UserPanel");
             }
             return response;
+        }
+        public IActionResult EnterOTP()
+        {
+
+            ViewBag.email = TempData["email"] as string;
+            ViewBag.password = TempData["password"] as string;
+            return View();
+        }
+        public void OTPCorrectionCheck(string email, string password)
+        {
+            TempData["email"] = email;
+            TempData["password"] = password;
+            RedirectToAction("Panel", "UserPanel");
         }
     }
 }
